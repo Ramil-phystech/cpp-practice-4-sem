@@ -1,0 +1,7 @@
+{
+  "sensor_id": "sensor_alpha",
+  "sensor_type": "temperature",
+  "last_event": "Initialization_started",
+  "current_temp": "24.500000",
+  "last_event": "Data_collected"
+}

@@ -1,0 +1,6 @@
+{
+  "sensor_id": "system_core",
+  "sensor_type": "diagnostic",
+  "last_event": "Startup",
+  "cpu_load_percent": "12.500000"
+}

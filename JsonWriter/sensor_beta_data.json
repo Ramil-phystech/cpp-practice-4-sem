@@ -1,0 +1,7 @@
+{
+  "sensor_id": "sensor_beta",
+  "sensor_type": "humidity",
+  "last_event": "Initialization_started",
+  "current_humidity": "60.200000",
+  "last_event": "Data_collected"
+}
