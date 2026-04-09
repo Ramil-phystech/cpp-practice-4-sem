@@ -17,21 +17,17 @@ struct LogEvent {
 
 class Log {
 private:
-    inline static Log* instance = nullptr;
-
     std::deque<LogEvent> events;
     const size_t MAX_EVENTS = 10;
 
-    Log() {}
+    Log() = default;
 
     Log(const Log&) = delete;
     Log& operator=(const Log&) = delete;
 
 public:
-    static Log* Instance() {
-        if (instance == nullptr) {
-            instance = new Log();
-        }
+    static Log& Instance() {
+        static Log instance;
         return instance;
     }
 
@@ -50,7 +46,7 @@ public:
     }
 
     // Вывод последних событий
-    void print() {
+    void print() const {
         std::cout << "Last " << events.size() << " Events" << std::endl;
 
         for (const auto& event : events) {
@@ -76,24 +72,23 @@ public:
 
             std::cout << "[" << time_str << "] [" << level_str << "] " << event.message << std::endl;
         }
-        std::cout << "--------------------------" << std::endl;
+        std::cout << "--------------------------\n";
     }
 };
 
-
 int main() {
-    Log* log = Log::Instance();
+    Log& log = Log::Instance();
 
-    log->message(LOG_NORMAL, "program loaded");
-    log->message(LOG_WARNING, "badly memory usage");
+    log.message(LOG_NORMAL, "program loaded");
+    log.message(LOG_WARNING, "badly memory usage");
 
     for (int i = 1; i <= 12; ++i) {
-        log->message(LOG_NORMAL, "check #" + std::to_string(i));
+        log.message(LOG_NORMAL, "check #" + std::to_string(i));
     }
 
-    log->message(LOG_ERROR, "error happens! help me!");
+    log.message(LOG_ERROR, "error happens! help me!");
 
-    log->print();
+    log.print();
 
     return 0;
 }
