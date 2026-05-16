@@ -6,10 +6,10 @@
 #include <memory>
 
 std::ostream &operator<<(std::ostream &stream, const PointCloud &pc) {
-    stream << "Point cloud (" << pc.pointcloud_type_ << "): " << std::endl;
+    stream << "Point cloud (" << ToString(pc.type_) << "): " << std::endl;
     for (size_t i = 0; i < pc.size_; ++i) {
-        for (size_t j = 0; j < pc.point_size_; ++j) {
-            stream << pc.points_[i * pc.point_size_ + j] << " ";
+        for (size_t j = 0; j < pc.layout_.point_size; ++j) {
+            stream << pc.points_[i * pc.layout_.point_size + j] << " ";
         }
         stream << std::endl;
     }
@@ -19,7 +19,7 @@ std::ostream &operator<<(std::ostream &stream, const PointCloud &pc) {
 int main() {
     try {
         PointCloud pc_xyzir;
-        FillPointCloud(&pc_xyzir, 3, "XYZIR",
+        FillPointCloud(&pc_xyzir, 3, PointType::XYZIR,
                        {
                            5.0, 1.2, 2.1, 0.5, 1.0,
                            -3.2, 0.2, 1.1, 0.7, 1.0,

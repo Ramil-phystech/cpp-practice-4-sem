@@ -5,7 +5,6 @@
 #include "PointCloud.h"
 
 #include <string>
-#include <cmath>
 #include <unordered_map>
 #include <memory>
 
@@ -46,25 +45,8 @@ namespace pointcloud_preprocessor {
 
         virtual ~Filter() = default;
 
-        const std::string &GetFilterName() const { return filter_name_; }
-
-        double GetDistance(const PointCloud &pc, size_t index) const {
-            if (pc.pointcloud_type_ == "XYZIR") {
-                double x = pc.points_[index * pc.point_size_ + 0];
-                double y = pc.points_[index * pc.point_size_ + 1];
-                double z = pc.points_[index * pc.point_size_ + 2];
-                return std::hypot(x, y, z);
-            }
-            return pc.points_[index * pc.point_size_ + 5];
-        }
-
-        double GetAzimuth(const PointCloud &pc, size_t index) const {
-            if (pc.pointcloud_type_ == "XYZIR") {
-                double x = pc.points_[index * pc.point_size_ + 0];
-                double y = pc.points_[index * pc.point_size_ + 1];
-                return std::atan2(y, x);
-            }
-            return pc.points_[index * pc.point_size_ + 6];
+        const std::string &GetFilterName() const {
+            return filter_name_;
         }
 
         virtual std::unique_ptr<PointCloud> Apply(const PointCloud &pc) = 0;

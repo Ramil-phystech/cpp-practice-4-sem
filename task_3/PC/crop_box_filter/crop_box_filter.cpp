@@ -10,17 +10,16 @@ namespace pointcloud_preprocessor {
 
     std::unique_ptr<PointCloud> CropBoxFilter::Apply(const PointCloud &pc) {
         auto output_pc = std::make_unique<PointCloud>();
-        output_pc->pointcloud_type_ = pc.pointcloud_type_;
-        output_pc->point_size_ = pc.point_size_;
+        output_pc->Init(pc.type_, 0);
 
         output_pc->points_.reserve(pc.points_.size());
 
         size_t output_points_count = 0;
 
-        for (size_t i = 0; i + 2 < pc.points_.size(); i += pc.point_size_) {
-            double x = pc.points_[i + 0];
-            double y = pc.points_[i + 1];
-            double z = pc.points_[i + 2];
+        for (size_t i = 0; i < pc.size_; ++i) {
+            double x = pc.GetX(i);
+            double y = pc.GetY(i);
+            double z = pc.GetZ(i);
 
             if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(z)) {
                 logger_.log("Ignoring point containing NaN values");
@@ -32,8 +31,9 @@ namespace pointcloud_preprocessor {
                                    (z > param_.min_z && z < param_.max_z);
 
             if (point_is_inside != param_.negative) {
-                for (size_t j = 0; j < pc.point_size_; ++j) {
-                    output_pc->points_.push_back(pc.points_[i + j]);
+                size_t offset = i * pc.layout_.point_size;
+                for (size_t j = 0; j < pc.layout_.point_size; ++j) {
+                    output_pc->points_.push_back(pc.points_[offset + j]);
                 }
                 output_points_count++;
             }
